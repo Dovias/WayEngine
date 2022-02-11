@@ -1,0 +1,2 @@
+Command: C:\Program Files\Eclipse Adoptium\jdk-17.0.1.12-hotspot\bin\java.exe -Dpaperclip.patchonly=true -classpath C:\Users\Dovias\Desktop\Programming Projects\Java\WayEngine\.gradle\caches\paperweight\setupCache\extractDevBundle.dir\data\paperclip-mojang+yarn.jar io.papermc.paperclip.Main
+Applying patches
