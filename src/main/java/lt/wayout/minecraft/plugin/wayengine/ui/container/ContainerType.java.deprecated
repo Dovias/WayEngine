@@ -1,0 +1,25 @@
+package lt.wayout.minecraft.plugin.wayengine.ui.container;
+
+public enum ContainerType {
+    GENERIC_9X(9),
+    CRAFTING_TABLE(3),
+    FURNACE(1),
+    GENERIC_3X3(3),
+    ENCHANTING_TABLE(2),
+    BREWING_STAND(1),
+    TRADE(3),
+    BEACON(1),
+    ANVIL(3),
+    HOPPER(4),
+    LLAMA(4),
+    HORSE(1),
+    CHESTED_HORSE,
+    CARTOGRAPHY_TABLE,
+    GRINDSTONE,
+    LECTERN, // THIS COULD BE REMOVED!
+    LOOM,
+    STONECUTTER,
+    PLAYER(9);
+
+    public ContainerType(int rowLength)
+}
