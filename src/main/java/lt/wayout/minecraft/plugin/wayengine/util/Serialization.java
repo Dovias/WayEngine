@@ -5,7 +5,6 @@ import net.minecraft.nbt.*;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_18_R1.util.CraftMagicNumbers;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import org.jetbrains.annotations.NotNull;
@@ -18,11 +17,19 @@ public class Serialization {
     private Serialization() {}
 
     @NotNull
-    public static List<Map<String, Object>> serialize(@NotNull final Inventory inventory, boolean dataTypes) {
-        List<Map<String, Object>> data = new ArrayList<>(inventory.getSize());
-        for (int i = 0; i < inventory.getSize(); i++) {
-            ItemStack itemStack = inventory.getItem(i);
+    public static List<Map<String, Object>> serialize(@NotNull final List<ItemStack> itemStacks, boolean dataTypes) {
+        List<Map<String, Object>> data = new ArrayList<>(itemStacks.size());
+        for (ItemStack itemStack : itemStacks) {
             if (itemStack == null) continue;
+            data.add(Serialization.serialize(itemStack, dataTypes));
+        }
+        return data;
+    }
+
+    @NotNull
+    public static List<Map<String, Object>> serialize(@NotNull final ItemStack[] itemStacks, boolean dataTypes) {
+        List<Map<String, Object>> data = new ArrayList<>(itemStacks.length);
+        for (ItemStack itemStack : itemStacks) {
             data.add(Serialization.serialize(itemStack, dataTypes));
         }
         return data;
@@ -78,30 +85,17 @@ public class Serialization {
         return null;
     }
 
-    /*@NotNull
-    public static Map<String, Object> serialize(@NotNull final CompoundTag compoundTag, boolean dataTypes) {
-        Map<String, Object> dataMap = new HashMap<>();
-        for (Map.Entry<String, Tag> entry : compoundTag.tags.entrySet()) {
-            dataMap.put(entry.getKey(), Serialization.serialize(entry.getValue(), dataTypes));
+    @NotNull
+    public static List<ItemStack> deserialize(@NotNull final List<Map<?, ?>> serializedData) {
+        List<ItemStack> items = new ArrayList<>();
+        for (Map<?, ?> serializedMap : serializedData) {
+            ItemStack serializedStack = Serialization.deserialize(serializedMap);
+            if (serializedStack != null) items.add(serializedStack);
         }
-        return dataMap;
-    }*/
-    /*@NotNull
-    public static Object serialize(@NotNull final CollectionTag<?> collectionTag, boolean dataTypes) {
-        List<Object> list = new ArrayList<>(collectionTag.size());
-        for (int i = 0; i < collectionTag.size(); i++) {
-            Tag tag = collectionTag.get(i);
-            list.add(Serialization.serialize(tag, false));
-        }
-        if (dataTypes && !(collectionTag instanceof ListTag)) {
-            Map<String, Object> map = new LinkedHashMap<>();
-            map.put("type", collectionTag.getType().getName().substring(0, collectionTag.getType().getName().length()-2).toLowerCase(Locale.ROOT) + "_array");
-            map.put("values", list);
-            return map;
-        }
-        return list;
-    }*/
+        return items;
+    }
 
+    @Nullable
     public static ItemStack deserialize(@NotNull final Map<?, ?> serializedData) {
         if (!(serializedData.get("type") instanceof String type) || !(serializedData.get("amount") instanceof Integer amount)) return null;
         Material material = Material.matchMaterial(type);

@@ -23,6 +23,7 @@ import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -64,6 +65,7 @@ public class EngineCommand implements CommandExecutor {
                 //this.tracker.stop(player);
                 return false;
             }
+            player.getInventory().getContents();
             sender.sendMessage(ChatColor.DARK_GREEN + "" + ChatColor.BOLD + " WAYOUT" + ChatColor.DARK_GRAY + " » " + ChatColor.GRAY + "Varikliuko " + ChatColor.GREEN + "„debug“" + ChatColor.GRAY + " funkcija buvo sėkmingai " + ChatColor.GREEN + "įjungta" + ChatColor.GRAY + '!');
             this.plugin.getConfig().set("item-debug", Serialization.serialize(player.getInventory().getItemInMainHand(), true));
             this.plugin.saveConfig();
