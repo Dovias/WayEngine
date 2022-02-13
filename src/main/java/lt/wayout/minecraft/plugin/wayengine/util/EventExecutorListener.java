@@ -6,6 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Consumer;
+import org.jetbrains.annotations.NotNull;
 
 public class EventExecutorListener <E extends Event> implements Listener, EventExecutor {
     final Consumer<? super E> consumer;
@@ -15,8 +16,8 @@ public class EventExecutorListener <E extends Event> implements Listener, EventE
     }
 
     @Override
-    public void execute(Listener l,Event e) {
-        consumer.accept((E)e);
+    public void execute(@NotNull Listener listener, @NotNull Event event) {
+        consumer.accept((E)event);
     }
 
     public static <E extends Event> void register(Plugin plugin, Class<E> clazz, Consumer<? super E> listener) {
