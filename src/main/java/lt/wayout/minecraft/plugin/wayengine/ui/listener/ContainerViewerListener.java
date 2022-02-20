@@ -72,7 +72,5 @@ public class ContainerViewerListener implements Listener {
         UIView<?> ui = this.manager.getUIView(UUID.nameUUIDFromBytes(Ints.toByteArray(event.getInventory().hashCode())));
         if (!(ui instanceof GUIContainerView containerView) || !(event.getPlayer() instanceof Player player)) return;
         containerView.close(player);
-        player.sendMessage("Container: ");
-
     }
 }

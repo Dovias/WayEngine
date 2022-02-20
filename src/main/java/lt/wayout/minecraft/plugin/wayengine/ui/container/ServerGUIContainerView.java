@@ -107,7 +107,6 @@ public class ServerGUIContainerView extends GUIContainerView {
             if (bukkitView.getTopInventory() != this.inventory) continue;
             if (slot < super.getUI().getSize()) {
                 bukkitView.setItem(slot, !(element instanceof GUIContainerItem containerItem) ? null : containerItem.getItemStack());
-                player.sendMessage("set item inside the container");
                 continue;
             }
             ItemStackBuffer storage = entry.getValue();
@@ -127,7 +126,6 @@ public class ServerGUIContainerView extends GUIContainerView {
                 bukkitView.setItem(slot, containerItem.getItemStack());
 
                 entry.setValue(storage);
-                player.sendMessage("set container item outside the container");
                 continue;
             }
 
