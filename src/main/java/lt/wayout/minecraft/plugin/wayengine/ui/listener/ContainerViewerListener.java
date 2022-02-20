@@ -7,13 +7,11 @@ import lt.wayout.minecraft.plugin.wayengine.ui.*;
 import lt.wayout.minecraft.plugin.wayengine.ui.container.*;
 import lt.wayout.minecraft.plugin.wayengine.ui.container.handler.GUIActionContext;
 import lt.wayout.minecraft.plugin.wayengine.ui.container.handler.GUIContainerAction;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.Collection;
@@ -34,7 +32,6 @@ public class ContainerViewerListener implements Listener {
         if (!(ui instanceof GUIContainerView containerView) || !(event.getWhoClicked() instanceof Player player)) return;
         InventoryAction action = event.getAction();
         Collection<Integer> slots = Collections.singleton(event.getRawSlot());
-        player.sendMessage(action.name());
         switch (action) {
         case UNKNOWN:
             event.setCancelled(true);
@@ -68,9 +65,17 @@ public class ContainerViewerListener implements Listener {
     }
 
     @EventHandler
+    public void onInventoryOpen(InventoryOpenEvent event) {
+        UIView<?> ui = this.manager.getUIView(UUID.nameUUIDFromBytes(Ints.toByteArray(event.getInventory().hashCode())));
+        if (!(ui instanceof GUIContainerView containerView) || !(event.getPlayer() instanceof Player player)) return;
+        player.sendMessage(ChatColor.GREEN + String.valueOf(ui.getUI().getViews()));
+    }
+
+    @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
         UIView<?> ui = this.manager.getUIView(UUID.nameUUIDFromBytes(Ints.toByteArray(event.getInventory().hashCode())));
         if (!(ui instanceof GUIContainerView containerView) || !(event.getPlayer() instanceof Player player)) return;
         containerView.close(player);
+        player.sendMessage(ChatColor.RED + String.valueOf(ui.getUI().getViews()));
     }
 }

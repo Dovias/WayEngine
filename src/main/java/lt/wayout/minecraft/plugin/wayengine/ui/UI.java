@@ -10,9 +10,10 @@ import java.util.UUID;
 
 public interface UI<T extends UIView<? extends UI<T>>> {
     @Nullable
-    T open(@NotNull final Player player);
+    T open(@NotNull final Player player, boolean isTransient);
 
-    //boolean open(@NotNull final Player player, T view);
+    @Nullable
+    T open(@NotNull final Player player);
 
     boolean close(@NotNull final Player player);
 

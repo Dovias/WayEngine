@@ -46,6 +46,8 @@ public class EngineCommand implements CommandExecutor {
 
                         } else if (type == ClickType.MIDDLE) {
                             uiView.setElement(containerItem, 55);
+                        } else if (type == ClickType.NUMBER_KEY) {
+                            EngineCommand.this.view.open(player);
                         }
                     }
                 }
