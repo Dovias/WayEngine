@@ -14,24 +14,24 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class ContainerInventoryListener implements Listener {
-    private final UIRegistry manager;
+public class ContainerViewerListener implements Listener {
+    private final UIHandlingRegistry manager;
 
-    public ContainerInventoryListener(UIRegistry manager) {
+    public ContainerViewerListener(UIHandlingRegistry manager) {
         this.manager = Preconditions.checkNotNull(manager, "GUIManager object cannot be null!");
     }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        UI<?> ui = this.manager.getUI(UUID.nameUUIDFromBytes(Ints.toByteArray(event.getInventory().hashCode())));
-        GUIContainerView containerView;
-        if (!(ui instanceof GUIContainer guiContainer) || !(event.getWhoClicked() instanceof Player player) || (containerView = guiContainer.getView(player)) == null) return;
+        UIView<?> ui = this.manager.getUIView(UUID.nameUUIDFromBytes(Ints.toByteArray(event.getInventory().hashCode())));
+        if (!(ui instanceof GUIContainerView containerView) || !(event.getWhoClicked() instanceof Player player)) return;
         InventoryAction action = event.getAction();
         Collection<Integer> slots = Collections.singleton(event.getRawSlot());
         player.sendMessage(action.name());
@@ -62,19 +62,17 @@ public class ContainerInventoryListener implements Listener {
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {
-        UI<?> ui = this.manager.getUI(UUID.nameUUIDFromBytes(Ints.toByteArray(event.getInventory().hashCode())));
-        GUIContainerView containerView;
-        if (!(ui instanceof GUIContainer guiContainer) || !(event.getWhoClicked() instanceof Player player) || (containerView = guiContainer.getView(player)) == null) return;
+        UIView<?> ui = this.manager.getUIView(UUID.nameUUIDFromBytes(Ints.toByteArray(event.getInventory().hashCode())));
+        if (!(ui instanceof GUIContainerView containerView) || !(event.getWhoClicked() instanceof Player player)) return;
         event.setCancelled(!containerView.getUI().getHandler().handleItems(new GUIActionContext(containerView, player, event.getRawSlots(), GUIContainerAction.fromBukkit(event.getType()))));
     }
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
-        UI<?> ui = this.manager.getUI(UUID.nameUUIDFromBytes(Ints.toByteArray(event.getInventory().hashCode())));
-        GUIContainerView containerView;
-        if (!(ui instanceof ServerGUIContainer guiContainer) || !(event.getPlayer() instanceof Player player) || (containerView = guiContainer.getView(player)) == null) return;
+        UIView<?> ui = this.manager.getUIView(UUID.nameUUIDFromBytes(Ints.toByteArray(event.getInventory().hashCode())));
+        if (!(ui instanceof GUIContainerView containerView) || !(event.getPlayer() instanceof Player player)) return;
         containerView.close(player);
-        player.sendMessage("Container: " + containerView.getUI().hasView(player));
+        player.sendMessage("Container: ");
 
     }
 }

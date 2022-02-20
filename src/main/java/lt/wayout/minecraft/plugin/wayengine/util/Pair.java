@@ -1,6 +1,8 @@
 package lt.wayout.minecraft.plugin.wayengine.util;
 
-public class Pair<A, B> {
+import java.io.Serializable;
+
+public class Pair<A, B> implements Serializable {
     private final A a;
     private final B b;
 

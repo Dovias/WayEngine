@@ -24,7 +24,7 @@ public abstract class AbstractGUIActionHandler implements GUIActionHandler {
     }
 
     public boolean handleItemAnimation(GUIContainerView view, Player player, int rawSlot) {
-        if (view.getUI().getView(player) != view) return false;
+        if (!view.getUI().hasView(view)) return false;
 
         InventoryView bukkitView = player.getOpenInventory();
         if (!(view.getElement(rawSlot) instanceof GUIAnimatedContainerItem animatedItem) || !animatedItem.isPlaying() || !AbstractGUIActionHandler.this.playing.add(animatedItem)) {

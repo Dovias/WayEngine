@@ -12,25 +12,21 @@ public interface UI<T extends UIView<? extends UI<T>>> {
     @Nullable
     T open(@NotNull final Player player);
 
-    boolean open(@NotNull final Player player, T view);
+    //boolean open(@NotNull final Player player, T view);
 
     boolean close(@NotNull final Player player);
+
+    boolean close(@NotNull final T view);
 
     boolean close();
 
     @Nullable
-    T getView(@NotNull final Player player);
+    T getView(@NotNull final UUID uuid);
 
-    boolean hasView(@NotNull final Player player);
-
-    @NotNull
-    Collection<Player> getViewers();
+    boolean hasView(@NotNull final T view);
 
     @NotNull
     Collection<T> getViews();
-
-    @NotNull
-    UUID getUniqueId();
 
     @NotNull
     Plugin getPlugin();

@@ -6,32 +6,18 @@ import lt.wayout.minecraft.plugin.wayengine.WayEngine;
 import lt.wayout.minecraft.plugin.wayengine.protocol.ContainerType;
 import lt.wayout.minecraft.plugin.wayengine.ui.UI;
 import lt.wayout.minecraft.plugin.wayengine.ui.container.*;
-import lt.wayout.minecraft.plugin.wayengine.ui.container.handler.GUIActionContext;
-import lt.wayout.minecraft.plugin.wayengine.ui.container.handler.GUIContainerAction;
-import lt.wayout.minecraft.plugin.wayengine.ui.container.handler.GUIInventoryActionHandler;
 import lt.wayout.minecraft.plugin.wayengine.ui.container.handler.GUIRecalculatedActionHandler;
-import lt.wayout.minecraft.plugin.wayengine.util.Serialization;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntTag;
-import net.minecraft.nbt.Tag;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class EngineCommand implements CommandExecutor {
     private final WayEngine plugin;
@@ -41,11 +27,26 @@ public class EngineCommand implements CommandExecutor {
     public EngineCommand(WayEngine plugin) {
         this.plugin = Preconditions.checkNotNull(plugin, "WayEngine object cannot be null!");
 
+        GUIContainerItem containerItem = new GUIContainerItem(new ItemStack(Material.GOLD_INGOT)) {
+            @Override
+            public void invoke(@NotNull GUIContainerView uiView, @NotNull ClickType type, @NotNull Player player) {
+                player.sendMessage("View element!");
+            }
+        };
+
         this.view = new ServerGUIContainer(this.plugin, ContainerType.GENERIC_9X4, "Powered by WayEngine", new GUIRecalculatedActionHandler(), List.of(
                 new GUIContainerItem(new ItemStack(Material.DIAMOND)) {
                     @Override
                     public void invoke(@NotNull GUIContainerView uiView, @NotNull ClickType type, @NotNull Player player) {
                         player.sendMessage("You got mail!");
+                        if (type == ClickType.RIGHT) {
+                            uiView.setElement(null, 54);
+                        } else if (type == ClickType.LEFT) {
+                            uiView.setElement(containerItem, 54);
+
+                        } else if (type == ClickType.MIDDLE) {
+                            uiView.setElement(containerItem, 55);
+                        }
                     }
                 }
         ));
@@ -65,14 +66,11 @@ public class EngineCommand implements CommandExecutor {
                 //this.tracker.stop(player);
                 return false;
             }
-            player.getInventory().getContents();
             sender.sendMessage(ChatColor.DARK_GREEN + "" + ChatColor.BOLD + " WAYOUT" + ChatColor.DARK_GRAY + " » " + ChatColor.GRAY + "Varikliuko " + ChatColor.GREEN + "„debug“" + ChatColor.GRAY + " funkcija buvo sėkmingai " + ChatColor.GREEN + "įjungta" + ChatColor.GRAY + '!');
-            this.plugin.getConfig().set("item-debug", Serialization.serialize(player.getInventory().getItemInMainHand(), true));
-            this.plugin.saveConfig();
-            player.getInventory().addItem(Serialization.deserialize((Map<?,?>)this.plugin.getConfig().get("item-debug")));
-
+            this.view.open(player);
+            //this.plugin.getConfig().set("item-debug", Serialization.serializeItems(player.getInventory().getContents()));
+            //this.plugin.saveConfig();
             //Map<String, Object> this.plugin.getConfig().get("item-debug");
-
 
             /*CompoundTag anotherCompoundTag =  new CompoundTag();
             CompoundTag thirdCompoundTag = new CompoundTag();

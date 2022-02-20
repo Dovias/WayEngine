@@ -45,10 +45,11 @@ public class Serialization {
         return data;
     }
 
-    public static byte @Nullable [] serializeItem(@NotNull final ItemStack itemStack) {
+    public static byte @Nullable [] serializeObject(@NotNull final Object object) {
+        if (object instanceof byte[] byteArray) return byteArray;
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try (BukkitObjectOutputStream bukkitOutputStream = new BukkitObjectOutputStream(outputStream)) {
-            bukkitOutputStream.writeObject(itemStack);
+            bukkitOutputStream.writeObject(object);
         } catch (IOException exception) {
             exception.printStackTrace();
             return null;
@@ -56,15 +57,12 @@ public class Serialization {
         return outputStream.toByteArray();
     }
 
+    public static byte @Nullable [] serializeItem(@NotNull final ItemStack itemStack) {
+        return Serialization.serializeObject(itemStack);
+    }
+
     public static byte @Nullable [] serializeItems(final ItemStack @NotNull [] itemStacks) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try (BukkitObjectOutputStream bukkitOutputStream = new BukkitObjectOutputStream(outputStream)) {
-            bukkitOutputStream.writeObject(itemStacks);
-        } catch (IOException exception) {
-            exception.printStackTrace();
-            return null;
-        }
-        return outputStream.toByteArray();
+        return Serialization.serializeObject(itemStacks);
     }
 
     // Ugly. Needs something more fancy and cleaner looking.
@@ -116,20 +114,19 @@ public class Serialization {
 
     @Nullable
     public static ItemStack[] deserializeItems(byte[] serializedData) {
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(serializedData);
-        try (BukkitObjectInputStream bukkitInputStream = new BukkitObjectInputStream(inputStream)) {
-            return bukkitInputStream.readObject() instanceof ItemStack[] itemStacks ? itemStacks : null;
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return Serialization.deserializeObject(serializedData) instanceof ItemStack[] itemStacks ? itemStacks : null;
     }
 
     @Nullable
     public static ItemStack deserializeItem(byte[] serializedData) {
+        return Serialization.deserializeObject(serializedData) instanceof ItemStack itemStack ? itemStack : null;
+    }
+
+    @Nullable
+    public static Object deserializeObject(byte[] serializedData) {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(serializedData);
         try (BukkitObjectInputStream bukkitInputStream = new BukkitObjectInputStream(inputStream)) {
-            return bukkitInputStream.readObject() instanceof ItemStack itemStack ? itemStack : null;
+            return bukkitInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
