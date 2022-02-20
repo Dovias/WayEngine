@@ -15,7 +15,7 @@ import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
 
 public class ItemStackBuffer {
-    private volatile ItemStack[] itemStacks;
+    private final ItemStack[] itemStacks;
     private int amount;
 
     public ItemStackBuffer(final int size) {
