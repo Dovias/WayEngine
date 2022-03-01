@@ -2,10 +2,11 @@ package lt.wayout.minecraft.plugin.wayengine.command;
 
 import com.google.common.base.Preconditions;
 import lt.wayout.minecraft.plugin.wayengine.WayEngine;
-
 import lt.wayout.minecraft.plugin.wayengine.protocol.ContainerType;
 import lt.wayout.minecraft.plugin.wayengine.ui.UI;
-import lt.wayout.minecraft.plugin.wayengine.ui.container.*;
+import lt.wayout.minecraft.plugin.wayengine.ui.container.GUIContainerItem;
+import lt.wayout.minecraft.plugin.wayengine.ui.container.GUIContainerView;
+import lt.wayout.minecraft.plugin.wayengine.ui.container.ServerGUIContainer;
 import lt.wayout.minecraft.plugin.wayengine.ui.container.handler.GUIRecalculatedActionHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -63,7 +64,7 @@ public class EngineCommand implements CommandExecutor {
             return false;
         } else if (args[0].equalsIgnoreCase("debug") && sender instanceof Player player) {
             if (args.length == 2 && args[1].equalsIgnoreCase("stop")) {
-                sender.sendMessage(ChatColor.DARK_GREEN + "" + ChatColor.BOLD + " WAYOUT" + ChatColor.DARK_GRAY + " » " + ChatColor.GRAY + "Varikliuko " + ChatColor.RED + "„debug“" + ChatColor.GRAY + " funkcija buvo sėkmingai įjungta!" + ChatColor.GREEN + "įjungta" + ChatColor.GRAY + '!');
+                sender.sendMessage(ChatColor.DARK_GREEN + "" + ChatColor.BOLD + " WAYOUT" + ChatColor.DARK_GRAY + " » " + ChatColor.GRAY + "Varikliuko " + ChatColor.RED + "„debug“" + ChatColor.GRAY + " funkcija buvo sėkmingai " + ChatColor.RED + "išjungta" + ChatColor.GRAY + '!');
                 //this.tracker.debugStop = true;
                 //this.tracker.stop(player);
                 return false;
