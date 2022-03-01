@@ -32,6 +32,7 @@ public class JsonUtils {
 		return saveObject(path, object, JsonUtils.defaultGson);
 	}
 
+	// Note: Suppress cast as workaround, cast is always checked
 	public static @Nullable Object loadObject(Path path, Object classOrType, boolean deleteIfNull, Gson gson){
 		Object object = null;
 		try {
