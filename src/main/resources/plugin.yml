@@ -2,6 +2,7 @@ main: lt.wayout.minecraft.plugin.wayengine.WayEngine
 name: WayEngine
 version: 1.0-SNAPSHOT
 api-version: 1.18
+softdepend: [PlaceholderAPI]
 commands:
   wayengine:
     description: ''
