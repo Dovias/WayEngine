@@ -1,19 +1,16 @@
 package lt.wayout.minecraft.plugin.wayengine.ui.container;
 
-import lt.wayout.minecraft.plugin.wayengine.storage.ItemStackBuffer;
-
 import com.google.common.primitives.Ints;
-
+import lt.wayout.minecraft.plugin.wayengine.storage.ItemStackBuffer;
 import lt.wayout.minecraft.plugin.wayengine.thread.SingleThreadPool;
 import lt.wayout.minecraft.plugin.wayengine.util.FileUtils;
-
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,8 +28,8 @@ public class ServerGUIContainerView extends GUIContainerView {
 
         Server server = container.getPlugin().getServer();
         this.inventory = switch(super.getType()) {
-            case GENERIC_9X1, GENERIC_9X2, GENERIC_9X3, GENERIC_9X4, GENERIC_9X5, GENERIC_9X6 -> server.createInventory(null, super.getUI().getSize(), container.getDisplayName());
-            default -> server.createInventory(null, super.getType().toBukkit(), container.getDisplayName());
+            case GENERIC_9X1, GENERIC_9X2, GENERIC_9X3, GENERIC_9X4, GENERIC_9X5, GENERIC_9X6 -> server.createInventory(null, super.getUI().getSize(), Component.text(container.getDisplayName()));
+            default -> server.createInventory(null, super.getType().toBukkit(), Component.text(container.getDisplayName()));
         };
         for (int i = 0; i < super.getSize(); i++) {
             if (!(super.getElement(i) instanceof GUIContainerItem containerItem)) continue;
