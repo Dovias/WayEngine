@@ -15,6 +15,7 @@ public class EventExecutorListener <E extends Event> implements Listener, EventE
         this.consumer = consumer;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void execute(@NotNull Listener listener, @NotNull Event event) {
         consumer.accept((E)event);
