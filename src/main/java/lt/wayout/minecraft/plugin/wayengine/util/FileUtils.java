@@ -1,10 +1,12 @@
 package lt.wayout.minecraft.plugin.wayengine.util;
 
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class FileUtils {
 
@@ -48,5 +50,13 @@ public class FileUtils {
             return false;
         }
         return true;
+    }
+
+    public static Path getPluginDir(String pluginName) {
+        return Path.of(System.getProperty("user.dir"), String.format("/plugins/%s/", pluginName));
+    }
+
+    public static <T extends JavaPlugin> Path getPluginDir(T plugin) {
+        return Path.of(System.getProperty("user.dir"), String.format("/plugins/%s/", plugin.getName()));
     }
 }
