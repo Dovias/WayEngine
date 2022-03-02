@@ -2,9 +2,13 @@ package lt.wayout.minecraft.plugin.wayengine.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
 
 import javax.annotation.Nullable;
-import java.io.*;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,12 +36,16 @@ public class JsonUtils {
 		return saveObject(path, object, JsonUtils.defaultGson);
 	}
 
-	// Note: Suppress cast as workaround, cast is always checked
 	public static @Nullable
 	<T> T loadObject(Path path, Type type, Class<T> clazz, boolean deleteIfNull, Gson gson) {
 		T object = null;
 		try {
-			Reader reader = new FileReader(path.toFile());
+			path.getParent().toFile().mkdirs();
+			if (!path.toFile().exists()) {
+				path.toFile().createNewFile();
+				return null;
+			}
+			JsonReader reader = new JsonReader(new FileReader(path.toFile()));
 			if (type != null) {
 				object = gson.fromJson(reader, type);
 			} else if (clazz != null) {
