@@ -52,11 +52,21 @@ public class FileUtils {
         return true;
     }
 
+    public static boolean createDir(Path path) {
+        try {
+            Files.createDirectories(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
     public static Path getPluginDir(String pluginName) {
         return Path.of(System.getProperty("user.dir"), String.format("/plugins/%s/", pluginName));
     }
 
     public static <T extends JavaPlugin> Path getPluginDir(T plugin) {
-        return Path.of(System.getProperty("user.dir"), String.format("/plugins/%s/", plugin.getName()));
+        return getPluginDir(plugin.getName());
     }
 }
