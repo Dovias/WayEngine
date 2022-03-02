@@ -33,52 +33,55 @@ public class JsonUtils {
 	}
 
 	// Note: Suppress cast as workaround, cast is always checked
-	public static @Nullable Object loadObject(Path path, Object classOrType, boolean deleteIfNull, Gson gson){
-		Object object = null;
+	public static @Nullable
+	<T> T loadObject(Path path, Type type, Class<T> clazz, boolean deleteIfNull, Gson gson) {
+		T object = null;
 		try {
 			Reader reader = new FileReader(path.toFile());
-			if(classOrType instanceof Type type){ // class implements type
+			if (type != null) {
 				object = gson.fromJson(reader, type);
+			} else if (clazz != null) {
+				object = gson.fromJson(reader, clazz);
 			}
 			reader.close();
-			if(object == null && deleteIfNull){
+			if (object == null && deleteIfNull) {
 				Files.delete(path);
 			}
-		} catch (IOException e){
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return object;
 	}
 
-	public static Object loadObject(Path path, Class<?> clazz){
-		return loadObject(path, (Object) clazz, false, JsonUtils.defaultGson);
+	public static <T> T loadObject(Path path, Class<T> clazz) {
+		return loadObject(path, null, clazz, false, JsonUtils.defaultGson);
 	}
 
-	public static Object loadObject(Path path, Class<?> clazz, boolean deleteIfNull){
-		return loadObject(path, (Object) clazz, deleteIfNull, JsonUtils.defaultGson);
+	public static <T> T loadObject(Path path, Class<T> clazz, boolean deleteIfNull) {
+		return loadObject(path, null, clazz, deleteIfNull, JsonUtils.defaultGson);
 	}
 
-	public static Object loadObject(Path path, Class<?> clazz, Gson gson){
-		return loadObject(path, (Object) clazz, false, gson);
+	public static <T> T loadObject(Path path, Class<T> clazz, Gson gson) {
+		return loadObject(path, null, clazz, false, gson);
 	}
 
-	public static Object loadObject(Path path, Class<?> clazz, boolean deleteIfNull, Gson gson){
-		return loadObject(path, (Object) clazz, deleteIfNull, gson);
+	public static <T> T loadObject(Path path, Class<T> clazz, boolean deleteIfNull, Gson gson) {
+		return loadObject(path, null, clazz, deleteIfNull, gson);
 	}
 
-	public static Object loadObject(Path path, Type type){
-		return loadObject(path, (Object) type, false, JsonUtils.defaultGson);
+	public static <T> T loadObject(Path path, Type type) {
+		return loadObject(path, type, null, false, JsonUtils.defaultGson);
 	}
 
-	public static Object loadObject(Path path, Type type, boolean deleteIfNull){
-		return loadObject(path, (Object) type, deleteIfNull, JsonUtils.defaultGson);
+	public static <T> T loadObject(Path path, Type type, boolean deleteIfNull) {
+		return loadObject(path, type, null, deleteIfNull, JsonUtils.defaultGson);
 	}
 
-	public static Object loadObject(Path path, Type type, Gson gson){
-		return loadObject(path, (Object) type, false, gson);
+	public static <T> T loadObject(Path path, Type type, Gson gson) {
+		return loadObject(path, type, null, false, gson);
 	}
 
-	public static Object loadObject(Path path, Type type, boolean deleteIfNull, Gson gson){
-		return loadObject(path, (Object) type, deleteIfNull, gson);
+	public static <T> T loadObject(Path path, Type type, boolean deleteIfNull, Gson gson) {
+		return loadObject(path, type, null, deleteIfNull, gson);
 	}
 }
